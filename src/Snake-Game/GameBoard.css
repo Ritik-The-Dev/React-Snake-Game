@@ -1,0 +1,38 @@
+*{
+    overflow: hidden;
+
+}
+.snake-food
+{
+  position: absolute;
+  width: 2%;
+  height: 2%;
+  background-color: rgb(255, 0, 0);
+  border: 1px solid white;
+  z-index: 1;
+}
+.gameboard
+{
+    margin: 40px auto;
+    height: 550px;
+    width: 97%;
+    justify-content: space-around;
+    display: flex;
+}
+.game-area
+{
+    background-color: greenyellow;
+    width: 550px;
+    position: relative;
+    display: inline-block;
+    border: 2px solid black;
+}
+.snake-dot
+{
+  position: absolute;
+  width: 2%;
+  height: 2%;
+  background-color: rgb(123, 72, 45);
+  border: 1px solid rgb(0, 0, 0);
+  z-index: 2;
+}

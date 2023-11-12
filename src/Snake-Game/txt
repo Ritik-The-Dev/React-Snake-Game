@@ -1,0 +1,138 @@
+import React from 'react'
+import './GameBoard.css'
+
+const getRandomCoordinate = ()=>{
+    let min = 1;
+    let max = 98;
+    let x = Math.floor((Math.random()*(max) + min)/2) * 2;
+    let y = Math.floor((Math.random()*(max) + min)/2) * 2;
+    return [x,y];
+}
+export default class MainBoard extends React.Component{
+    constructor(){
+        super();
+        this.state={
+        Speed : 50,
+        Direction : "Right",
+        food: getRandomCoordinate(),
+        SnakeDots : [
+        [2,0],
+        [4,0],
+        [6,0]
+        ],
+    }
+    }
+    componentDidMount() 
+    {
+    setInterval(this.MoveSnake,this.state.Speed);
+    document.onkeydown = this.onKeyDown.bind(this);
+    }
+    componentDidUpdate()
+    {
+        this.GameOverLine();
+        this.EnlargeSnake(); 
+    }
+    o
+    onKeyDown = (e)=>{
+    e = e||window.event;
+    switch(e.key){
+        case 'ArrowLeft':
+               this.setState({Direction: "Left"});
+             break;
+        case 'ArrowRight':
+               this.setState({Direction: "Right"});
+             break;
+        case 'ArrowUp':
+               this.setState({Direction: "Up"});
+             break;
+        case 'ArrowDown':
+               this.setState({Direction: "Down"});
+             break;
+        case 'p':
+            alert("Game is Paused press Enter or ok to continue");
+            break;
+        case 'P':
+             alert("Game is Paused press Enter or ok to continue");
+            break;
+        default:
+            console.log("Use Arrow Keys");
+    }
+    }
+    
+    MoveSnake =  ()=>
+    {
+        
+        let dots = [...this.state.SnakeDots]
+        let head = dots[dots.length - 1];
+        switch(this.state.Direction){
+
+            case 'Right':
+                head = [head[0] + 2, head[1]];
+                break;
+            case 'Left':
+                head = [head[0] - 2, head[1]];
+                 break;
+            case 'Up':
+                head = [head[0], head[1] - 2];
+                break;
+            case 'Down':
+                head = [head[0], head[1] + 2];
+                break;
+            default:
+                    return ;
+        }
+    dots.push(head);
+    dots.shift();
+    this.setState({SnakeDots:dots})
+    }
+EnlargeSnake = ()=>{
+    let head = this.state.SnakeDots[this.state.SnakeDots.length - 1];
+    if(head[0] === this.state.food[0] && head[1] === this.state.food[1]){
+        this.setState({food:getRandomCoordinate()})
+    let newSnake = [...this.state.SnakeDots];
+    newSnake.unshift([]);
+    this.setState({SnakeDots :newSnake});
+    }
+}
+     GameOverLine = ()=>{
+        let head = this.state.SnakeDots[this.state.SnakeDots.length - 1];
+        if(head[0] > 100 || head[1] > 100 || head[0] < 0 || head[1] < 0){
+            alert("GameOver");
+            this.setState({
+                Speed : 50,
+                Direction : "Right",
+                food: getRandomCoordinate(),
+                SnakeDots : [
+                [2,0],
+                [4,0],
+                [6,0]
+                ],
+            })
+        }
+    }
+        render() {
+            const style = {
+                left : `${this.state.food[0]}%`,
+                top : `${this.state.food[1]}%`
+            }
+            return(
+                <div>
+                <h1>Snake Game</h1>
+                <div className="gameboard">
+                    <div className="game-area">
+                        <div>
+                    {this.state.SnakeDots.map((dot,i)=>{
+                const style={
+                    left:`${dot[0]}%`,
+                    top:`${dot[1]}%`}
+                return(
+                    <div className="snake-dot" key={i} style={style}></div>
+                )})}
+                    </div>
+                    <div className="snake-food" style={style}></div>
+                </div>
+                </div>
+              </div>
+            )
+        }
+}
